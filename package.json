@@ -1,0 +1,20 @@
+{
+  "name": "mini-vue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "micaiguai <1399880823@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "@types/jest": "^29.4.2",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0"
+  },
+  "dependencies": {
+    "@babel/preset-typescript": "^7.21.0"
+  }
+}
