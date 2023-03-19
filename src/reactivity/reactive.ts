@@ -1,4 +1,4 @@
-import { mutableHandlers, readonlyHanlders } from "./baseHandlers"
+import { mutableHandlers, ReactiveFlags, readonlyHanlders, shallowReadonlyHandlers } from "./baseHandlers"
 
 export function reactive(raw) {
   return createActiveObject(raw, mutableHandlers)
@@ -6,6 +6,21 @@ export function reactive(raw) {
 
 export function readonly(raw) {
   return createActiveObject(raw, readonlyHanlders)
+}
+export function shallowReadonly(raw) {
+  return createActiveObject(raw, shallowReadonlyHandlers)
+}
+
+export function isReactive(target) {
+  return !!target[ReactiveFlags.IS_REACTIVE]
+}
+
+export function isReadonly(target) {
+  return !!target[ReactiveFlags.IS_READONLY]
+}
+
+export function isProxy(target) {
+  return isReactive(target) || isReadonly(target)
 }
 
 function createActiveObject(raw, baseHandlers) {
