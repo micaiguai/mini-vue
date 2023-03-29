@@ -20,5 +20,11 @@
     "rollup": "^3.20.0",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.192",
+    "@types/pixi.js": "^5.0.0",
+    "lodash": "^4.17.21",
+    "pixi.js": "^7.2.3"
   }
 }
