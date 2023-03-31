@@ -48,7 +48,7 @@ export const mutableHandlers = {
   set
 }
 
-export const readonlyHanlders = {
+export const readonlyHandlers = {
   get: readonlyGet,
   set(target, key, value, receiver) {
     console.warn(`key: ${key} set false, because target is readonly.`, target)
@@ -56,6 +56,6 @@ export const readonlyHanlders = {
   }
 }
 
-export const shallowReadonlyHandlers = extend({}, readonlyHanlders, {
+export const shallowReadonlyHandlers = extend({}, readonlyHandlers, {
   get: shallowReadonlyGet
 })
