@@ -3,13 +3,17 @@ import { createRenderer } from '../runtime-core/index'
 function createElement(type) {
   return document.createElement(type)
 }
-function patchProp(el, key, val) {
+function patchProp(el: Element, key: string, prevProp, nextProp) {
   const isOn = /^on[A-Z]/.test(key)
   if (isOn) {
     const event = key.slice(2, key.length).toLowerCase()
-    el.addEventListener(event, val)
+    el.addEventListener(event, nextProp)
   } else {
-    el.setAttribute(key, val)
+    if (nextProp === undefined || nextProp === null) {
+      el.removeAttribute(key)
+    } else {
+      el.setAttribute(key, nextProp)
+    }
   }
 }
 function insert(el, container) {

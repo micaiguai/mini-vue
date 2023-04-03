@@ -5,7 +5,7 @@ export const Fragment = Symbol('Fragment')
 export const Text = Symbol('Text')
 
 export function createVnode(type, props?, children?) {
-  const vnode = {
+  const vnode: Vnode = {
     type,
     props,
     children,

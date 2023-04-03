@@ -1,4 +1,5 @@
 import { effect, proxyRefs } from "../reactivity"
+import { EMPTY_OBJ } from "../shared"
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppApi } from "./createApp"
@@ -74,9 +75,30 @@ export function createRenderer(options) {
   }
   
   function patchElement(n1, n2, container) {
-    console.log('patchElement')
-    console.log('n1 :', n1)
-    console.log('n2 :', n2)
+    const oldProps = n1.props ?? EMPTY_OBJ
+    const newProps = n2.props ?? EMPTY_OBJ
+    const el = n2.el = n1.el
+    pathProps(el, oldProps, newProps)
+  }
+
+  function pathProps(el: Element, oldProps: Record<string, any>, newProps: Record<string, any>) {
+    if (oldProps !== newProps) {
+      for (const key in newProps) {
+        const prevProp = oldProps[key]
+        const nextProp = newProps[key]
+        if (prevProp !== nextProp) {
+          hostPatchProp(el, key, prevProp, nextProp)
+        }
+      }
+    }
+
+    if (oldProps !== EMPTY_OBJ) {
+      for (const key in oldProps) {
+        if (!(key in newProps)) {
+          hostPatchProp(el, key, undefined, undefined)
+        }
+      }
+    }
   }
 
   function mountElement(vnode: any, container: Element, parentComponent) {
@@ -89,7 +111,7 @@ export function createRenderer(options) {
     }
     for (const key in props) {
       const val = props[key]
-      hostPatchProp(el, key, val)
+      hostPatchProp(el, key, null, val)
     }
     hostInsert(el, container)
   }
