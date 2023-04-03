@@ -108,7 +108,7 @@ export function createRenderer(options) {
     }
   }
 
-  function isSameVnode(n1, n2) {
+  function isSomeTypeVnode(n1, n2) {
     return n1.type === n2.type && n1.key === n2.key
   }
   function patchKeyedChildren(c1, c2, container, parentComponent, anchor) {
@@ -121,7 +121,7 @@ export function createRenderer(options) {
     while (i <= e1 && i <= e2) {
       const n1 = c1[i]
       const n2 = c2[i]
-      if (isSameVnode(n1, n2)) {
+      if (isSomeTypeVnode(n1, n2)) {
         patch(n1, n2, container, parentComponent, anchor)
         i++
       } else {
@@ -131,7 +131,7 @@ export function createRenderer(options) {
     while (i <= e1 && i <= e2) {
       const n1 = c1[e1]
       const n2 = c2[e2]
-      if (isSameVnode(n1, n2)) {
+      if (isSomeTypeVnode(n1, n2)) {
         patch(n1, n2, container, parentComponent, anchor)
         e1--
         e2--
@@ -156,7 +156,40 @@ export function createRenderer(options) {
         i++
       }
     } else {
-      
+      const keyToNewIndexMap = new Map()
+      const newNodeCount = e2 - 1
+      let patchCount = 0
+      for (let index = i; index <= e2; index++) {
+        const { key } = c2[index]
+        keyToNewIndexMap.set(key, index)
+      }
+      for (let index = i; index <= e1; index++) {
+        const n1 = c1[index]
+        const { key, el } = n1
+        if (patchCount === newNodeCount) {
+          hostRemove(el)
+        }
+        let newIndex
+        if (key !== undefined && key !== null) {
+          newIndex = keyToNewIndexMap.get(key)
+        } else {
+          for (let j = i; j <= e2; j++) {
+            const _n1 = c1[j]
+            const _n2 = c2[j]
+            if (isSomeTypeVnode(_n1, _n2)) {
+              newIndex = j
+              break
+            }
+          }
+        }
+        const n2 = c2[newIndex]
+        if (newIndex !== undefined) {
+          patch(n1, n2, container, parentComponent, anchor)
+          patchCount++
+        } else {
+          hostRemove(n1.el)
+        }
+      }
     }
   }
 
