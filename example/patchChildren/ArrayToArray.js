@@ -28,12 +28,23 @@ import { h, ref } from "../../lib/guide-mini-vue.esm.js"
 //   h('p', { key: 'B' }, 'B'),
 //   h('p', { key: 'C' }, 'C'),
 // ]
+// const prevChildren = [
+//   h('p', { key: 'B' }, 'B'),
+//   h('p', { key: 'C' }, 'C'),
+// ]
+// const nextChildren = [
+//   h('p', { key: '0' }, '0'),
+//   h('p', { key: 'A' }, 'A'),
+//   h('p', { key: 'B' }, 'B'),
+//   h('p', { key: 'C' }, 'C'),
+// ]
 const prevChildren = [
+  h('p', { key: '0' }, '0'),
+  h('p', { key: 'A' }, 'A'),
   h('p', { key: 'B' }, 'B'),
   h('p', { key: 'C' }, 'C'),
 ]
 const nextChildren = [
-  h('p', { key: 'A' }, 'A'),
   h('p', { key: 'B' }, 'B'),
   h('p', { key: 'C' }, 'C'),
 ]
