@@ -91,7 +91,6 @@ export function createRenderer(options) {
   function patchChildren(n1, n2, container, parentComponent) {
     const { shapeFlag: prevShapeFlag, children: c1 } = n1
     const { shapeFlag, children: c2 } = n2
-    console.log('patchChildren')
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         unmountChildren(c1)
@@ -113,7 +112,6 @@ export function createRenderer(options) {
       const el = children[i];
       hostRemove(el)
     }
-
   }
 
   function pathProps(el: Element, oldProps: Record<string, any>, newProps: Record<string, any>) {
