@@ -5,10 +5,11 @@ export const Fragment = Symbol('Fragment')
 export const Text = Symbol('Text')
 
 export function createVnode(type, props?, children?) {
-  const vnode: Vnode = {
+  const vnode: any = {
     type,
     props,
     children,
+    key: props?.key,
     shapeFlag: getShapeFlag(type),
     el: null
   }

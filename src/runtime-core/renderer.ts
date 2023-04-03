@@ -18,7 +18,7 @@ export function createRenderer(options) {
     patch(null, vnode, container, null)
   }
   
-  function patch(n1, n2: any, container, parentComponent) {
+  function patch(n1, n2: any, container, parentComponent, anchor?) {
     const { type, shapeFlag } = n2
   
     switch (type) {
@@ -84,8 +84,8 @@ export function createRenderer(options) {
     const oldProps = n1.props ?? EMPTY_OBJ
     const newProps = n2.props ?? EMPTY_OBJ
     const el = n2.el = n1.el
-    patchChildren(n1, n2, el, parentComponent)
     pathProps(el, oldProps, newProps)
+    patchChildren(n1, n2, el, parentComponent)
   }
 
   function patchChildren(n1, n2, container, parentComponent) {
@@ -102,9 +102,51 @@ export function createRenderer(options) {
       if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
         hostSetElementText(container, '')
         mountChildren(c2, container, parentComponent)
+      } else {
+        patchKeyedChildren(c1, c2, container, parentComponent)
       }
     }
-    
+  }
+
+  function isSameVnode(n1, n2) {
+    return n1.type === n2.type && n1.key === n2.key
+  }
+  function patchKeyedChildren(c1, c2, container, parentComponent) {
+    let i = 0
+    let l1 = c1.length
+    let l2 = c2.length
+    let e1 = l1 - 1
+    let e2 = l2 - 1
+
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[i]
+      const n2 = c2[i]
+      if (isSameVnode(n1, n2)) {
+        patch(n1, n2, container, parentComponent)
+        i++
+      } else {
+        break
+      }
+    }
+    while (i <= e1 && i <= e2) {
+      const n1 = c1[e1]
+      const n2 = c2[e2]
+      if (isSameVnode(n1, n2)) {
+        patch(n1, n2, container, parentComponent)
+        e1--
+        e2--
+      } else {
+        break
+      }
+    }
+    if (i > e1) {
+      if (i <= e2) {
+        const n2 = c2[i]
+        const nextE2 = e2 + 1
+        const anchor = nextE2 < l2 ? c2[nextE2] : null
+        patch(null, n2, container, parentComponent, anchor)
+      }
+    }
   }
 
   function unmountChildren(children) {
